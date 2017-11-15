@@ -1376,4 +1376,40 @@ describe Bosh::OpenStackCloud::Cloud, "create_vm" do
       end
     end
   end
+
+  describe 'enable_auto_anti_affinity' do
+    context 'when "enable_auto_anti_affinity" is true' do
+      let(:options) do
+        options = mock_cloud_options['properties']
+        options['openstack']['enable_auto_anti_affinity'] = true
+        options
+      end
+
+      context 'when a server_group with soft-anti-affinity policy already exists for this instance group' do
+
+      end
+
+      context 'when no server_group with soft-anti-affinity policy exists for this instance group' do
+        it 'creates a server group with the right policy' do
+          cloud.create_vm("agent-id", "sc-id",
+            resource_pool_spec,
+            { "network_a" => dynamic_network_spec },
+            nil, { "test_env" => "value" })
+
+#          expect(Bosh::OpenStackCloud::TagManager).to have_received(:tag_server).with(server, registry_key: "vm-#{unique_name}")
+        end
+        it 'creates the vm with the server group assigned' do
+        end
+      end
+    end
+
+    context 'when "enable_auto_anti_affinity" is false' do
+      let(:options) do
+        options = mock_cloud_options['properties']
+        options['openstack']['enable_auto_anti_affinity'] = false
+        options
+      end
+    end
+  end
+
 end
